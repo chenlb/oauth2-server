@@ -1,0 +1,10 @@
+target/
+mock/users.json
+.git/
+pem/
+web/oidc/jwks.json
+.idea/
+.DS_Store
+.gitignore
+Dockerfile
+docker-compose.yml

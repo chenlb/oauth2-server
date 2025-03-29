@@ -1,0 +1,15 @@
+[
+  {
+    "client_id": "my_client_id_1001",
+    "client_secret": "aaaa-bbbb-cccc-dddd-eeee",
+    "allow_redirect_uris": [
+      "*"
+    ],
+    "contract_scopes": ["openid","email","profile","oidc","unionid"],
+    "allow_grant_types": [
+      "authorization_code",
+      "refresh_token"
+    ],
+    "subject_id": "my_org_id_001"
+  }
+]

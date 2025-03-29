@@ -1,0 +1,13 @@
+services:
+  oauth2-server:
+    image: chenlb/oauth2-server:0.0.1
+    ports:
+      - "8000:8000"
+      - "9080:9080"
+    volumes:
+      # 包括 mock/clients.json 覆盖
+      #- ./mock:/app/mock
+      # 只指定 mock/users.json
+      - ./mock/users.json:/app/mock/users.json
+      # 指定 pem 文件, 看 README.md 生成 私钥/公钥
+      - ./pem:/app/pem
