@@ -1,4 +1,4 @@
-FROM openjdk:23-slim-bookworm AS base
+FROM --platform=${TARGETPLATFORM:-linux/amd64} openjdk:23-slim-bookworm AS base
 
 COPY docker/sources.list /etc/apt/sources.list
 RUN apt update
