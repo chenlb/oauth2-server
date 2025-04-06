@@ -4,7 +4,9 @@
 
 使用 [sa-token oauth2-server](https://sa-token.cc/doc.html#/oauth2/readme) 的[示例](https://github.com/dromara/Sa-Token/tree/dev/sa-token-demo/sa-token-demo-oauth2/sa-token-demo-oauth2-server)修改而来。感谢 sa-token 项目。
 
-## 生成密钥/公钥
+## 快速开始
+
+### 生成密钥/公钥
 
 * 私钥用于 jwt 签名，输出 id_token
 * 公钥用于 jwks.json。
@@ -27,9 +29,9 @@ openssl genrsa -out rs256_private_key.pem 2048
 openssl rsa -pubout -in rs256_private_key.pem -out rs256_public_key.pem
 ```
 
-## 启动 oauth2 server
+### 启动 oauth2 server
 
-### 配置 mock 用户
+#### 配置 mock 用户
 
 ```bash
 cd ~/oauth2-server
@@ -54,7 +56,7 @@ users.json 文件内容格式如下，按自己的需求修改：
 ]
 ```
 
-### 启动 docker
+#### 启动 docker
 
 ```bash
 # 也可以自定义 client 配置
@@ -64,7 +66,7 @@ docker run --name oauth2-mock-server -d \
     -p 9080:9080 -p 8000:8000 \
     -v ~/oauth2-server/mock/users.json:/app/mock/users.json \
     -v ~/oauth2-server/pem:/app/pem \
-    chenlb/oauth2-server:0.0.1
+    chenlb/oauth2-server:0.0.2
 ```
 
 默认 clients.json 文件内容如下：
@@ -86,7 +88,7 @@ docker run --name oauth2-mock-server -d \
 ]
 ```
 
-## 打开 H5 oauth2 client 测试界面
+### 打开 H5 oauth2 client 测试界面
 
 设置 hosts 文件，将 sa-oauth-server.com 映射到本机 ip （推荐内网 ip，不是 127.0.0.1），如：
 ```bash
@@ -96,3 +98,27 @@ docker run --name oauth2-mock-server -d \
 ```
 
 H5 oauth2 client 测试界面地址：http://sa-oauth-server.com:9080/client/oauth2-client.html
+
+## 开发说明
+
+### 本地构建 docker 镜像
+
+设置 maven 镜像仓库地址，打开 docker/setting.sh 文件，aliyun 镜像仓库地址去掉注释：
+
+```xml
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+    <!-- ... -->
+    <!-- 去掉 159 行 和 166 行的注释内容 -->
+    <!-- 159 行
+    <mirror>
+      <id>aliyunmaven</id>
+      <mirrorOf>*</mirrorOf>
+      <name>阿里云公共仓库</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+    -->
+    <!-- ... -->
+</settings>
+```
