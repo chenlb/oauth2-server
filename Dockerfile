@@ -1,5 +1,8 @@
 FROM --platform=${TARGETPLATFORM:-linux/amd64} openjdk:23-slim-bookworm AS base
 
+# 设置上海时区
+ENV TZ='Asia/Shanghai'
+
 COPY docker/sources.list /etc/apt/sources.list
 RUN apt update
 
