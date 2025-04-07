@@ -18,15 +18,14 @@ cd ~/oauth2-server
 
 # 保存私钥/公钥使用 
 mkdir -p pem
-cd pem
 
 # 参考：https://tongqijie.com/post/rs256-rsa-with-sha-256-si-yao-he-gong-yao-sheng-cheng-fang-fa-zjc22re2
 # 生成私钥
-openssl genrsa -out rs256_private_key.pem 2048
+openssl genrsa -out pem/rs256_private_key.pem 2048
 
 # 生成公钥
 # 用于 http://sa-oauth-server.com:9080/.well-known/openid-configuration 返回 jwks_uri 连接返回 jwks.json 内容。
-openssl rsa -pubout -in rs256_private_key.pem -out rs256_public_key.pem
+openssl rsa -pubout -in pem/rs256_private_key.pem -out pem/rs256_public_key.pem
 ```
 
 ### 启动 oauth2 server
@@ -66,7 +65,7 @@ docker run --name oauth2-mock-server -d \
     -p 9080:9080 -p 8000:8000 \
     -v ~/oauth2-server/mock/users.json:/app/mock/users.json \
     -v ~/oauth2-server/pem:/app/pem \
-    chenlb/oauth2-server:0.0.2
+    chenlb/oauth2-server:0.0.3
 ```
 
 默认 clients.json 文件内容如下：

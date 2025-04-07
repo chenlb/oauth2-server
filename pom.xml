@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.chenlb.oauth</groupId>
 	<artifactId>oauth2-server</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.3</version>
 
 	<!-- SpringBoot -->
 	<parent>
