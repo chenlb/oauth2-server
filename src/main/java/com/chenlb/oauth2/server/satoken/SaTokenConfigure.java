@@ -25,10 +25,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
@@ -126,14 +123,17 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 	@PostConstruct
 	public void createJwks() {
 		File jwksFile = new File("web/oidc/jwks.json");
-		if(jwksFile.isFile() && jwksFile.exists()) {
+		if(jwksFile.exists()) {
 			logger.info("jwks file = [{}] exists, skip for create", jwksFile);
 			return;
 		}
-		try {
-			String public_key_file = "pem/rs256_public_key.pem";
+		String public_key_file = "pem/rs256_public_key.pem";
+		try(
+				FileInputStream pkIn = new FileInputStream(public_key_file);
+				FileOutputStream jwksOut = new FileOutputStream(jwksFile);
+		) {
 			logger.info("load publicKey file = [{}] for openid connect jwks", public_key_file);
-			PublicKey publicKey = PemUtil.readPemPublicKey(new FileInputStream(public_key_file));
+			PublicKey publicKey = PemUtil.readPemPublicKey(pkIn);
 
 			// https://connect2id.com/products/nimbus-jose-jwt/examples/pem-encoded-objects
 			// https://connect2id.com/products/nimbus-jose-jwt/examples/jwk-generation
@@ -144,8 +144,8 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
 			RSAKey rsakey = builder.build();
 
-			IoUtil.writeUtf8(new FileOutputStream(jwksFile), true, rsakey.toJSONString());
-		} catch (FileNotFoundException e) {
+			IoUtil.writeUtf8(jwksOut, true, "{\"keys\":[", rsakey.toJSONString(), "]}");
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
